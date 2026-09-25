@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for FigureForge
+about: Suggest an idea for figureforge
 title: ''
 labels: enhancement
 assignees: nogula

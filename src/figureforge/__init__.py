@@ -1,6 +1,6 @@
 import os
 
-import FigureForge.plugins as plugins
+import figureforge.plugins as plugins
 
 
 def run(figure=None):

@@ -1,18 +1,18 @@
 import os
+
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtWidgets import (
+    QApplication,
     QDialog,
-    QLabel,
-    QVBoxLayout,
     QHBoxLayout,
+    QLabel,
     QPushButton,
     QSizePolicy,
-    QApplication,
+    QVBoxLayout,
 )
 
-from PySide6.QtGui import QIcon, QDesktopServices
-from PySide6.QtCore import QUrl
-
-from FigureForge.__init__ import __version__, ASSETS_DIR
+from figureforge.__init__ import ASSETS_DIR, __version__
 
 
 class NewPluginDialog(QDialog):
@@ -35,9 +35,7 @@ class NewPluginDialog(QDialog):
             button.clicked.connect(self.close)
             button_layout.addWidget(button)
         copy_button.clicked.connect(lambda: QApplication.clipboard().setText(filename))
-        open_button.clicked.connect(
-            lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(plugin_dir))
-        )
+        open_button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(plugin_dir)))
         ok_button.setDefault(True)
         layout.addLayout(button_layout)
 

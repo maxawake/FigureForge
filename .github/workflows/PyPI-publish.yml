@@ -22,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     environment:
         name: pypi
-        url: https://pypi.org/p/FigureForge
+        url: https://pypi.org/p/figureforge
 
     steps:
     - uses: actions/checkout@v4
     - name: Ensure correct project directory case
       run: |
         if [ -d "figureforge" ]; then
-          mv figureforge FigureForge
+          mv figureforge figureforge
         fi
     - name: Set up Python
       uses: actions/setup-python@v3

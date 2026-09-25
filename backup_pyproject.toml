@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "figureforge"
+version = "0.3.3"
+description = ""
+authors = ["Noah Gula <noahrgula@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+packages = [
+    { include = "figureforge", from = "." }
+]
+
+[tool.poetry.dependencies]
+python = "<3.14,>=3.11"
+matplotlib = "^3.9.1"
+PySide6 = "^6.7.2"
+appdirs = "^1.4.4"
+requests = "^2.26.0"
+pyqtdarktheme-fork = "^2.3.4"
+numpy = "^1.26.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+figureforge = "figureforge.main:main"

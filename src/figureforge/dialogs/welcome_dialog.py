@@ -1,24 +1,23 @@
 import os
 
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QDialog,
-    QLabel,
-    QVBoxLayout,
     QCheckBox,
+    QDialog,
     QHBoxLayout,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
 )
 
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtCore import QSize, Qt
-
-from FigureForge.__init__ import __version__, ASSETS_DIR
+from figureforge.__init__ import ASSETS_DIR, __version__
 
 
 class WelcomeDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"Welcome to FigureForge {__version__}")
+        self.setWindowTitle(f"Welcome to figureforge {__version__}")
         self.setWindowIcon(QIcon(os.path.join(ASSETS_DIR, "logo.ico")))
         layout = QVBoxLayout()
 
@@ -29,13 +28,11 @@ class WelcomeDialog(QDialog):
 
         layout.addWidget(logo, alignment=Qt.AlignCenter)
 
-        description = QLabel(
-            "FigureForge is a GUI tool for creating and editing matplotlib figures."
-        )
+        description = QLabel("figureforge is a GUI tool for creating and editing matplotlib figures.")
         layout.addWidget(description, alignment=Qt.AlignLeft)
 
         documentation_link = QLabel(
-            'For more information, please visit the <a href="https://github.com/nogula/FigureForge/wiki">documentation</a>.'
+            'For more information, please visit the <a href="https://github.com/nogula/figureforge/wiki">documentation</a>.'
         )
         documentation_link.setOpenExternalLinks(True)
         layout.addWidget(documentation_link, alignment=Qt.AlignLeft)

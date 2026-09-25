@@ -1,18 +1,18 @@
 import os
 
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
     QTreeWidget,
     QTreeWidgetItem,
     QVBoxLayout,
-    QLabel,
     QWidget,
-    QPushButton,
-    QHBoxLayout,
 )
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QIcon
 
-from FigureForge.__init__ import CURRENT_DIR
+from figureforge.__init__ import CURRENT_DIR
 
 
 class FigureExplorer(QWidget):
@@ -31,9 +31,7 @@ class FigureExplorer(QWidget):
         header_layout.addStretch()
         reload_button = QPushButton("Reload")
         reload_button.setToolTip("Reload from file")
-        reload_button.setIcon(
-            QIcon(os.path.join(CURRENT_DIR, "resources/icons/refresh_icon.png"))
-        )
+        reload_button.setIcon(QIcon(os.path.join(CURRENT_DIR, "resources/icons/refresh_icon.png")))
         reload_button.clicked.connect(self.refreshTree.emit)
         header_layout.addWidget(reload_button)
         layout.addLayout(header_layout)

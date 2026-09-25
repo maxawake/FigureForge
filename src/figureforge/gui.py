@@ -1,50 +1,49 @@
-import sys
-import os
-import subprocess
 import importlib
 import inspect
-from io import BytesIO
+import os
+import subprocess
+import sys
 from copy import deepcopy
-
-from PySide6.QtWidgets import (
-    QApplication,
-    QWidget,
-    QSplitter,
-    QFileDialog,
-    QVBoxLayout,
-    QMainWindow,
-    QMessageBox,
-    QMenu,
-    QTabWidget,
-)
-from PySide6.QtCore import Qt, QUrl
-from PySide6.QtGui import QDesktopServices, QIcon, QAction, QPixmap
+from io import BytesIO
 
 import qdarktheme
-
-from FigureForge.__init__ import (
-    __version__,
-    ICONS_DIR,
-    CURRENT_DIR,
-    ASSETS_DIR,
+from PySide6.QtCore import Qt, QUrl
+from PySide6.QtGui import QAction, QDesktopServices, QIcon, QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QSplitter,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
 )
-from FigureForge.dialogs.ff_dialogs import (
-    check_for_updates,
-    NewPluginDialog,
-    ExportFigureDialog,
-    BugReportDialog,
+
+from figureforge.__init__ import (
+    ASSETS_DIR,
+    CURRENT_DIR,
+    ICONS_DIR,
+    __version__,
+)
+from figureforge.dialogs.ff_dialogs import (
     AboutDialog,
+    BugReportDialog,
+    ExportFigureDialog,
+    NewPluginDialog,
     SaveWorkDialog,
     WelcomeDialog,
+    check_for_updates,
 )
-from FigureForge.figure_manager import FigureManager
-from FigureForge.preferences import Preferences, PreferencesDialog
+from figureforge.figure_manager import FigureManager
+from figureforge.preferences import Preferences, PreferencesDialog
 
 
 class MainWindow(QMainWindow):
     def __init__(self, splash, figure):
         super().__init__()
-        self.setWindowTitle("FigureForge")
+        self.setWindowTitle("figureforge")
         self.setWindowIcon(QIcon(os.path.join(ASSETS_DIR, "logo.ico")))
         self.setMinimumSize(800, 600)
 
@@ -143,12 +142,8 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(delete_item_action)
 
         preferences_action = QAction("Preferences", self)
-        preferences_action.triggered.connect(
-            lambda: PreferencesDialog(self.preferences, self)
-        )
-        preferences_action.setIcon(
-            QIcon(os.path.join(ICONS_DIR, "preferences_icon.png"))
-        )
+        preferences_action.triggered.connect(lambda: PreferencesDialog(self.preferences, self))
+        preferences_action.setIcon(QIcon(os.path.join(ICONS_DIR, "preferences_icon.png")))
         edit_menu.addAction(preferences_action)
 
         self.plugin_menu = menubar.addMenu("Plugins")
@@ -158,29 +153,19 @@ class MainWindow(QMainWindow):
         self.plugin_menu.addSeparator()
         open_plugins_folder_action = QAction("Open Plugins Folder...", self)
         open_plugins_folder_action.triggered.connect(
-            lambda: QDesktopServices.openUrl(
-                QUrl.fromLocalFile(self.preferences.get("plugin_directory"))
-            )
+            lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(self.preferences.get("plugin_directory")))
         )
-        open_plugins_folder_action.setIcon(
-            QIcon(os.path.join(ICONS_DIR, "folder_icon.png"))
-        )
+        open_plugins_folder_action.setIcon(QIcon(os.path.join(ICONS_DIR, "folder_icon.png")))
         self.plugin_menu.addAction(open_plugins_folder_action)
         reload_plugins_action = QAction("Reload Plugins", self)
         reload_plugins_action.triggered.connect(self.reload_plugins)
-        reload_plugins_action.setIcon(
-            QIcon(os.path.join(ICONS_DIR, "refresh_icon.png"))
-        )
+        reload_plugins_action.setIcon(QIcon(os.path.join(ICONS_DIR, "refresh_icon.png")))
         self.plugin_menu.addAction(reload_plugins_action)
         plugins_documentation_action = QAction("Plugins Documentation", self)
         plugins_documentation_action.triggered.connect(
-            lambda: QDesktopServices.openUrl(
-                QUrl("https://github.com/nogula/FigureForge/wiki/Plugins")
-            )
+            lambda: QDesktopServices.openUrl(QUrl("https://github.com/nogula/figureforge/wiki/Plugins"))
         )
-        plugins_documentation_action.setIcon(
-            QIcon(os.path.join(ICONS_DIR, "documentation_icon.png"))
-        )
+        plugins_documentation_action.setIcon(QIcon(os.path.join(ICONS_DIR, "documentation_icon.png")))
         self.plugin_menu.addAction(plugins_documentation_action)
         new_plugin_action = QAction("New Plugin", self)
         new_plugin_action.triggered.connect(self.new_plugin)
@@ -196,9 +181,7 @@ class MainWindow(QMainWindow):
 
         help_action = QAction("Help", self)
         help_action.triggered.connect(
-            lambda: QDesktopServices.openUrl(
-                QUrl("https://github.com/nogula/FigureForge/wiki")
-            )
+            lambda: QDesktopServices.openUrl(QUrl("https://github.com/nogula/figureforge/wiki"))
         )
         help_action.setIcon(QIcon(os.path.join(ICONS_DIR, "documentation_icon.png")))
         help_menu.addAction(help_action)
@@ -247,19 +230,13 @@ class MainWindow(QMainWindow):
 
         self.tab_widget.addTab(new_fm.canvas, "New Figure")
         self.tab_widget.setCurrentIndex(self.tab_widget.count() - 1)
-        new_fm.updateLabel.connect(
-            lambda label: self.tab_widget.setTabText(
-                self.tab_widget.currentIndex(), label
-            )
-        )
+        new_fm.updateLabel.connect(lambda label: self.tab_widget.setTabText(self.tab_widget.currentIndex(), label))
 
     def open_file(self):
         if not self.check_for_save(self.fm):
             return
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(
-            self, "Open File", "", "Figure Files (*.pkl)", options=options
-        )
+        file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "", "Figure Files (*.pkl)", options=options)
         if file_name:
             self.fm.file_name = file_name
             try:
@@ -272,11 +249,7 @@ class MainWindow(QMainWindow):
                 msgbox.setInformativeText(str(e))
                 msgbox.exec_()
                 return
-            tab_title = (
-                self.fm.file_name.split("/")[-1]
-                if self.fm.file_name is not None
-                else "New Figure"
-            )
+            tab_title = self.fm.file_name.split("/")[-1] if self.fm.file_name is not None else "New Figure"
             self.tab_widget.setTabText(self.tab_widget.currentIndex(), tab_title)
 
     def save_file(self):
@@ -287,18 +260,12 @@ class MainWindow(QMainWindow):
         self.update_recent_files()
         self.tab_widget.setTabText(
             self.tab_widget.currentIndex(),
-            (
-                self.fm.file_name.split("/")[-1]
-                if self.fm.file_name is not None
-                else "New Figure"
-            ),
+            (self.fm.file_name.split("/")[-1] if self.fm.file_name is not None else "New Figure"),
         )
 
     def save_as_file(self):
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getSaveFileName(
-            self, "Save File", "", "Figure Files (*.pkl)", options=options
-        )
+        file_name, _ = QFileDialog.getSaveFileName(self, "Save File", "", "Figure Files (*.pkl)", options=options)
         if file_name:
             self.fm.file_name = file_name
             self.fm.save_figure(self.fm.file_name)
@@ -351,9 +318,7 @@ class MainWindow(QMainWindow):
             if file_name.endswith(".py"):
                 module_name = file_name[:-3]
                 try:
-                    module = importlib.import_module(
-                        f"FigureForge.plugins.{module_name}"
-                    )
+                    module = importlib.import_module(f"figureforge.plugins.{module_name}")
                     if reload:
                         module = importlib.reload(module)
                     classes = [
@@ -369,9 +334,7 @@ class MainWindow(QMainWindow):
                                 action.setToolTip(cls.tooltip)
                             if hasattr(cls, "icon"):
                                 action.setIcon(QIcon(cls.icon))
-                            action.triggered.connect(
-                                lambda _, obj=cls: self.run_plugin(obj)
-                            )
+                            action.triggered.connect(lambda _, obj=cls: self.run_plugin(obj))
                             if reload:
                                 if hasattr(cls, "submenu"):
                                     submenu_exists = False
@@ -381,9 +344,7 @@ class MainWindow(QMainWindow):
                                             break
                                     if not submenu_exists:
                                         submenu = self.plugin_menu.insertMenu(
-                                            self.plugin_menu.actions()[
-                                                len(self.plugin_menu.actions()) - 3
-                                            ],
+                                            self.plugin_menu.actions()[len(self.plugin_menu.actions()) - 3],
                                             QMenu(cls.submenu),
                                         )
                                         submenu.menu().addAction(action)
@@ -391,9 +352,7 @@ class MainWindow(QMainWindow):
                                         submenu.menu().addAction(action)
                                 else:
                                     self.plugin_menu.insertAction(
-                                        self.plugin_menu.actions()[
-                                            len(self.plugin_menu.actions()) - 3
-                                        ],
+                                        self.plugin_menu.actions()[len(self.plugin_menu.actions()) - 3],
                                         action,
                                     )
                             else:
@@ -415,9 +374,7 @@ class MainWindow(QMainWindow):
                     print(f"Failed to load plugin {module_name}: {e}")
 
         if reload:
-            self.plugin_menu.insertSeparator(
-                self.plugin_menu.actions()[len(self.plugin_menu.actions()) - 3]
-            )
+            self.plugin_menu.insertSeparator(self.plugin_menu.actions()[len(self.plugin_menu.actions()) - 3])
 
     def run_plugin(self, plugin_class):
         selected_obj = self.fm.selected_obj
@@ -440,9 +397,7 @@ class MainWindow(QMainWindow):
 
     def new_plugin(self):
         """Creates a new plugin file from the template and opens it in the default app."""
-        template_filename = os.path.join(
-            CURRENT_DIR, "resources/templates/plugin_template.py"
-        )
+        template_filename = os.path.join(CURRENT_DIR, "resources/templates/plugin_template.py")
         plugin_dir = self.preferences.get("plugin_directory")
         new_plugin_filename = os.path.join(plugin_dir, "new_plugin.py")
         with open(template_filename, "r") as template_file:
@@ -476,11 +431,7 @@ class MainWindow(QMainWindow):
             return
         self.fm.file_name = file
         self.fm.load_figure(self.fm.file_name)
-        tab_title = (
-            self.fm.file_name.split("/")[-1]
-            if self.fm.file_name is not None
-            else "New Figure"
-        )
+        tab_title = self.fm.file_name.split("/")[-1] if self.fm.file_name is not None else "New Figure"
         self.tab_widget.setTabText(self.tab_widget.currentIndex(), tab_title)
 
     def update_recent_files(self):
@@ -535,7 +486,7 @@ class MainWindow(QMainWindow):
             elif res == QMessageBox.Cancel:
                 return False
         return True
-    
+
     def try_open_matplotlib(self):
         try:
             # import matplotlib.pyplot as plt

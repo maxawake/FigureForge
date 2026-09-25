@@ -1,6 +1,6 @@
-import FigureForge as FF
-
 import matplotlib.pyplot as plt
+
+import figureforge as FF
 
 fig, ax = plt.subplots()
 

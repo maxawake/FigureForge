@@ -1,14 +1,13 @@
 import os
 import sys
 
-from PySide6.QtWidgets import QApplication, QSplashScreen, QMessageBox
-from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Qt
-
 from matplotlib.figure import Figure
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QApplication, QMessageBox, QSplashScreen
 
-from FigureForge.gui import MainWindow
-from FigureForge.__init__ import CURRENT_DIR
+from figureforge.__init__ import CURRENT_DIR
+from figureforge.gui import MainWindow
 
 
 def create_splash() -> QSplashScreen:
@@ -20,7 +19,7 @@ def create_splash() -> QSplashScreen:
     """
     pixmap = QPixmap(os.path.join(CURRENT_DIR, "resources", "assets", "splash.png"))
     splash = QSplashScreen(pixmap)
-    splash.showMessage("Loading FigureForge...", Qt.AlignBottom | Qt.AlignLeft)
+    splash.showMessage("Loading figureforge...", Qt.AlignBottom | Qt.AlignLeft)
     splash.show()
     return splash
 

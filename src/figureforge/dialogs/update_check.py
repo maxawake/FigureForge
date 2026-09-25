@@ -1,19 +1,18 @@
 import os
-import requests
 
+import requests
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtWidgets import (
-    QDialog,
-    QLabel,
-    QVBoxLayout,
     QCheckBox,
+    QDialog,
     QHBoxLayout,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
 )
 
-from PySide6.QtGui import QIcon, QDesktopServices
-from PySide6.QtCore import QUrl
-
-from FigureForge.__init__ import __version__, ASSETS_DIR
+from figureforge.__init__ import ASSETS_DIR, __version__
 
 
 class UpdateFoundDialog(QDialog):
@@ -22,9 +21,7 @@ class UpdateFoundDialog(QDialog):
         self.setWindowTitle("Update Available")
         self.setWindowIcon(QIcon(os.path.join(ASSETS_DIR, "logo.ico")))
         layout = QVBoxLayout()
-        message = QLabel(
-            f"An update is available. Your version: v{__version__}, Latest version: {latest_version}"
-        )
+        message = QLabel(f"An update is available. Your version: v{__version__}, Latest version: {latest_version}")
         layout.addWidget(message)
         self.check = QCheckBox("Check for updates at startup")
         self.check.setChecked(True)
@@ -33,9 +30,7 @@ class UpdateFoundDialog(QDialog):
         button_layout.addStretch()
         update_button = QPushButton("Update")
         update_button.clicked.connect(
-            lambda: QDesktopServices.openUrl(
-                QUrl("https://github.com/nogula/FigureForge/releases/latest")
-            )
+            lambda: QDesktopServices.openUrl(QUrl("https://github.com/nogula/figureforge/releases/latest"))
         )
         update_button.clicked.connect(self.close)
         button_layout.addWidget(update_button)
@@ -49,7 +44,7 @@ class UpdateFoundDialog(QDialog):
 
 
 def check_for_updates():
-    url = "https://api.github.com/repos/nogula/FigureForge/releases/latest"
+    url = "https://api.github.com/repos/nogula/figureforge/releases/latest"
     try:
         response = requests.get(url)
         response.raise_for_status()

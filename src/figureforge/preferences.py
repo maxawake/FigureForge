@@ -1,39 +1,36 @@
-import os
 import json
+import os
 import re
-from appdirs import user_config_dir
 
+import qdarktheme
+from appdirs import user_config_dir
 from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
     QDialog,
-    QVBoxLayout,
+    QDialogButtonBox,
+    QFileDialog,
+    QFormLayout,
+    QHBoxLayout,
     QLabel,
     QLineEdit,
     QPushButton,
-    QFileDialog,
-    QCheckBox,
-    QComboBox,
-    QHBoxLayout,
-    QFormLayout,
-    QDialogButtonBox,
+    QVBoxLayout,
 )
 
-import qdarktheme
-
-from FigureForge.__init__ import CURRENT_DIR
-from FigureForge import __version__
+from figureforge import __version__
+from figureforge.__init__ import CURRENT_DIR
 
 
 class Preferences:
-    def __init__(self, app_name=__version__, app_author="FigureForge"):
+    def __init__(self, app_name=__version__, app_author="figureforge"):
         self.app_name = app_name
         self.app_author = app_author
         self.config_dir = user_config_dir(app_name, app_author)
         self.config_file = os.path.join(self.config_dir, "preferences.json")
         self.defaults = {
             "plugin_directory": os.path.join(CURRENT_DIR, "plugins"),
-            "plugin_requirements": os.path.join(
-                CURRENT_DIR, "plugins", "requirements.txt"
-            ),
+            "plugin_requirements": os.path.join(CURRENT_DIR, "plugins", "requirements.txt"),
             "last_export_path": "",
             "theme": "light",
             "debug": False,
@@ -117,18 +114,14 @@ class PreferencesDialog(QDialog):
         form_layout.addRow(QLabel("Plugin Directory:"), plugin_directory_layout)
 
         self.plugin_requirements_edit = QLineEdit(self)
-        self.plugin_requirements_edit.setText(
-            self.preferences.get("plugin_requirements")
-        )
+        self.plugin_requirements_edit.setText(self.preferences.get("plugin_requirements"))
         plugin_requirements_layout = QHBoxLayout()
         plugin_requirements_layout.addWidget(self.plugin_requirements_edit)
         browse_requirements_button = QPushButton("Browse")
         browse_requirements_button.clicked.connect(self.browse_plugin_requirements_file)
         plugin_requirements_layout.addWidget(browse_requirements_button)
 
-        form_layout.addRow(
-            QLabel("Plugin Requirements File:"), plugin_requirements_layout
-        )
+        form_layout.addRow(QLabel("Plugin Requirements File:"), plugin_requirements_layout)
 
         self.theme_combo = QComboBox(self)
         self.theme_combo.addItems(["auto", "light", "dark"])
@@ -158,17 +151,13 @@ class PreferencesDialog(QDialog):
             self.plugin_directory_edit.setText(directory)
 
     def browse_plugin_requirements_file(self):
-        file = QFileDialog.getOpenFileName(
-            self, "Select Plugin Requirements File", filter="Text Files (*.txt)"
-        )[0]
+        file = QFileDialog.getOpenFileName(self, "Select Plugin Requirements File", filter="Text Files (*.txt)")[0]
         if file:
             self.plugin_requirements_edit.setText(file)
 
     def save_preferences(self):
         self.preferences.set("plugin_directory", self.plugin_directory_edit.text())
-        self.preferences.set(
-            "plugin_requirements", self.plugin_requirements_edit.text()
-        )
+        self.preferences.set("plugin_requirements", self.plugin_requirements_edit.text())
         self.preferences.set("theme", self.theme_combo.currentText())
         self.preferences.set("debug", self.debug_checkbox.isChecked())
         self.accept()

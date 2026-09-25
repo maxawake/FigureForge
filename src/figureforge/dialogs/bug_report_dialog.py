@@ -1,23 +1,22 @@
 import os
 import sys
 
-from PySide6.QtWidgets import (
-    QWidget,
-    QDialog,
-    QDialogButtonBox,
-    QGridLayout,
-    QVBoxLayout,
-    QLabel,
-)
-from PySide6.QtGui import QIcon, QPixmap, QDesktopServices
-from PySide6.QtCore import QSize, Qt
-
-from FigureForge.__init__ import ASSETS_DIR, __version__
-from PySide6.__init__ import __version__ as pyside_version
-
 # Build errors with nuikta when trying to get mpl version as
 # "from matplotlib.__init__ import __version__ as mpl_version" so this is the workaround
 import matplotlib
+from PySide6.__init__ import __version__ as pyside_version
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QDesktopServices, QIcon, QPixmap
+from PySide6.QtWidgets import (
+    QDialog,
+    QDialogButtonBox,
+    QGridLayout,
+    QLabel,
+    QVBoxLayout,
+    QWidget,
+)
+
+from figureforge.__init__ import ASSETS_DIR, __version__
 
 mpl_version = matplotlib.__version__
 
@@ -26,7 +25,7 @@ class BugReportDialog(QDialog):
     def __init__(self, parent=None):
         super(BugReportDialog, self).__init__(parent)
 
-        self.setWindowTitle("FigureForge Bug Report")
+        self.setWindowTitle("figureforge Bug Report")
         self.setWindowIcon(QIcon(os.path.join(ASSETS_DIR, "logo.ico")))
 
         layout = QGridLayout()
@@ -46,12 +45,10 @@ class BugReportDialog(QDialog):
 
         label1 = QLabel("Press Yes to report a bug on the GitHub page.")
         label2 = QLabel("Please include the following information in your report: ")
-        label3 = QLabel(
-            f"Python version {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-        )
+        label3 = QLabel(f"Python version {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
         label4 = QLabel(f"Matplotlib version {mpl_version}")
         label5 = QLabel(f"PySide6 version {pyside_version}")
-        label6 = QLabel(f"FigureForge version {__version__}")
+        label6 = QLabel(f"figureforge version {__version__}")
 
         text_layout.addWidget(label1)
         text_layout.addWidget(label2)
@@ -74,6 +71,6 @@ class BugReportDialog(QDialog):
         self.exec()
 
     def open_issues_page(self):
-        url = "https://github.com/nogula/FigureForge/issues/new/choose"
+        url = "https://github.com/nogula/figureforge/issues/new/choose"
         QDesktopServices.openUrl(url)
         self.accept()

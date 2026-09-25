@@ -1,28 +1,28 @@
 import copy
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QScrollArea,
-    QGridLayout,
-    QLabel,
-    QCheckBox,
-    QLineEdit,
-    QComboBox,
-    QSpinBox,
-    QPlainTextEdit,
-)
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QColor, QFont
-from PySide6.QtCore import Qt
 
-from FigureForge.widgets.ff_widgets import (
-    ColorButton,
-    SpinBox,
-    TupleProperty,
-    DictProperty,
-)
 import matplotlib.colors as mcolors
 import matplotlib.font_manager as mpl_fm
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QColor, QFont
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QPlainTextEdit,
+    QScrollArea,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
+
+from figureforge.widgets.ff_widgets import (
+    ColorButton,
+    DictProperty,
+    SpinBox,
+    TupleProperty,
+)
 
 
 class PropertyInspector(QWidget):
@@ -83,23 +83,17 @@ class PropertyInspector(QWidget):
                 value_widget.setChecked(value)
             except TypeError:
                 value_widget.setChecked(False)
-            value_widget.stateChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.stateChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "string":
             value_widget = QLineEdit()
             value_widget.setText(value)
-            value_widget.textChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.textChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "multiline":
             value_widget = QPlainTextEdit()
             value_widget.setPlainText(value)
-            value_widget.textChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.textChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "choice":
             value_widget = QComboBox()
@@ -107,22 +101,16 @@ class PropertyInspector(QWidget):
             if isinstance(value, list):
                 value = value[0]
             value_widget.setCurrentText(str(value))
-            value_widget.currentTextChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.currentTextChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "color":
             c = mcolors.to_hex(value)
             value_widget = ColorButton(initial_color=QColor(c))
-            value_widget.colorChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.colorChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "float":
             value_widget = SpinBox()
-            value_widget.valueChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.valueChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "int":
             value_widget = QSpinBox()
@@ -132,21 +120,15 @@ class PropertyInspector(QWidget):
                 value_widget.setValue(value)
             except TypeError:
                 value_widget.setValue(0)
-            value_widget.valueChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.valueChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "tuple":
             value_widget = TupleProperty(types=types, values=value)
-            value_widget.valueChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.valueChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "dict":
             value_widget = DictProperty(types=types, values=value)
-            value_widget.valueChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.valueChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
         elif value_type == "font":
             value_widget = QComboBox()
@@ -156,9 +138,7 @@ class PropertyInspector(QWidget):
                 font = QFont(font_name)
                 value_widget.setItemData(value_widget.count() - 1, font, Qt.FontRole)
             value_widget.setCurrentText(value)
-            value_widget.currentTextChanged.connect(
-                lambda n=name, w=value_widget: self.on_value_changed(n, w)
-            )
+            value_widget.currentTextChanged.connect(lambda n=name, w=value_widget: self.on_value_changed(n, w))
             self.content_layout.addWidget(value_widget, row, 2)
 
     def on_value_changed(self, name, widget):

@@ -1,8 +1,9 @@
-import os
-import sys
 import importlib
 import inspect
-from FigureForge.__init__ import PLUGINS_DIR
+import os
+import sys
+
+from figureforge.__init__ import PLUGINS_DIR
 
 
 def _load_plugins():
@@ -10,7 +11,7 @@ def _load_plugins():
     for filename in os.listdir(PLUGINS_DIR):
         if filename.endswith(".py") and filename != "__init__.py":
             module_name = filename[:-3]
-            module = importlib.import_module(f"FigureForge.plugins.{module_name}")
+            module = importlib.import_module(f"figureforge.plugins.{module_name}")
 
             for name, obj in inspect.getmembers(module, inspect.isclass):
                 if obj.__module__ == module.__name__:

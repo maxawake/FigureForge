@@ -28,8 +28,8 @@ If applicable, add screenshots to help explain your problem.
  - Python version [e.g., 3.11]
  - matplotlib version [e.g., 3.9.1]
  - PySide6 version [e.g., 6.7.2]
- - FigureForge version [e.g. 0.1.0]
-These versions can be found in FigureForge by going to Help > Report Bug.
+ - figureforge version [e.g. 0.1.0]
+These versions can be found in figureforge by going to Help > Report Bug.
 
 **Additional context**
 Add any other context about the problem here.

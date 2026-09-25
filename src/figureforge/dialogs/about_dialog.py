@@ -1,5 +1,7 @@
 import os
 
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QDialog,
     QGridLayout,
@@ -7,16 +9,14 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtCore import QSize, Qt
 
-from FigureForge.__init__ import __version__, ASSETS_DIR
+from figureforge.__init__ import ASSETS_DIR, __version__
 
 
 class AboutDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("About FigureForge")
+        self.setWindowTitle("About figureforge")
         self.setWindowIcon(QIcon(os.path.join(ASSETS_DIR, "logo.ico")))
 
         layout = QGridLayout()
@@ -34,11 +34,9 @@ class AboutDialog(QDialog):
         text_layout.setContentsMargins(0, 0, 0, 0)
         text_layout.setSpacing(0)
 
-        label1 = QLabel(
-            "FigureForge is a GUI tool for creating and editing matplotlib figures."
-        )
+        label1 = QLabel("figureforge is a GUI tool for creating and editing matplotlib figures.")
         label2 = QLabel(
-            'Visit the <a href="https://github.com/nogula/FigureForge">project homepage</a> for more information.'
+            'Visit the <a href="https://github.com/nogula/figureforge">project homepage</a> for more information.'
         )
         label3 = QLabel(f"Version {__version__}")
         label4 = QLabel("Copyright 2024 Noah Gula")

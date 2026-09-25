@@ -1,13 +1,13 @@
-from PySide6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QSpinBox,
-    QLineEdit,
-    QCheckBox,
-)
 from PySide6.QtCore import Signal
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QHBoxLayout,
+    QLineEdit,
+    QSpinBox,
+    QWidget,
+)
 
-from FigureForge.widgets.custom_spinbox import SpinBox
+from figureforge.widgets.custom_spinbox import SpinBox
 
 
 class TupleProperty(QWidget):

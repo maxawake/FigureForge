@@ -1,16 +1,16 @@
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QSpinBox,
-    QLineEdit,
-    QCheckBox,
-)
-from PySide6.QtGui import QColor
 from PySide6.QtCore import Signal
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QLabel,
+    QLineEdit,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
-from FigureForge.widgets.color_button import ColorButton
-from FigureForge.widgets.custom_spinbox import SpinBox
+from figureforge.widgets.color_button import ColorButton
+from figureforge.widgets.custom_spinbox import SpinBox
 
 
 class DictProperty(QWidget):

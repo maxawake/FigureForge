@@ -1,26 +1,25 @@
 import os
 
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
+    QCheckBox,
     QDialog,
-    QVBoxLayout,
+    QFileDialog,
+    QFormLayout,
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QLineEdit,
-    QFileDialog,
-    QSpinBox,
+    QPushButton,
     QScrollArea,
-    QWidget,
     QSizePolicy,
-    QFormLayout,
-    QCheckBox,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtGui import QIcon
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-
-from FigureForge.__init__ import ASSETS_DIR
-from FigureForge.widgets.custom_spinbox import SpinBox
+from figureforge.__init__ import ASSETS_DIR
+from figureforge.widgets.custom_spinbox import SpinBox
 
 
 class ExportFigureDialog(QDialog):

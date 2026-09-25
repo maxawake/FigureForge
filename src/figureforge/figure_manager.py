@@ -1,21 +1,20 @@
+import json
 import os
 import pickle
-import json
 
-from PySide6.QtWidgets import (
-    QWidget,
-    QMessageBox,
-)
-from PySide6.QtCore import Signal
-
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import numpy as np
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import (
+    QMessageBox,
+    QWidget,
+)
 
-from FigureForge.__init__ import CURRENT_DIR
-from FigureForge.property_inspector import PropertyInspector
-from FigureForge.figure_explorer import FigureExplorer
+from figureforge.__init__ import CURRENT_DIR
+from figureforge.figure_explorer import FigureExplorer
+from figureforge.property_inspector import PropertyInspector
 
 
 class FigureManager(QWidget):
@@ -95,9 +94,7 @@ class FigureManager(QWidget):
         self.figure.__dict__.update(data.__dict__)
         self.canvas.draw()
         self.unsaved_changes = False
-        self.updateLabel.emit(
-            file_name.split("/")[-1] if self.file_name is not None else "New Figure"
-        )
+        self.updateLabel.emit(file_name.split("/")[-1] if self.file_name is not None else "New Figure")
         self.fe.build_tree(self.figure)
         self.pi.clear_properties()
         self.file_name = file_name
@@ -178,9 +175,7 @@ class FigureManager(QWidget):
 
         self.canvas.draw()
         self.unsaved_changes = True
-        self.updateLabel.emit(
-            f"{self.file_name.split('/')[-1] if self.file_name is not None else 'New Figure'} *"
-        )
+        self.updateLabel.emit(f"{self.file_name.split('/')[-1] if self.file_name is not None else 'New Figure'} *")
 
         if self.preferences.get("debug"):
             print(f"Changed {property_name} to {value} on {obj_class}")
@@ -195,9 +190,7 @@ class FigureManager(QWidget):
         self.attempt_delete(self.selected_obj)
         self.canvas.draw()
         self.unsaved_changes = True
-        self.updateLabel.emit(
-            f"{self.file_name.split('/')[-1] if self.file_name is not None else 'New Figure'} *"
-        )
+        self.updateLabel.emit(f"{self.file_name.split('/')[-1] if self.file_name is not None else 'New Figure'} *")
 
         self.fe.build_tree(self.figure)
         self.selected_obj = None
@@ -298,8 +291,8 @@ def create_default_figure():
     data = np.random.randn(100, 4)
 
     # Create the figure
-    fig, axs = plt.subplots(2,2)
-    fig.suptitle("FigureForge Demo Figure", fontsize=16, label="suptitle")
+    fig, axs = plt.subplots(2, 2)
+    fig.suptitle("figureforge Demo Figure", fontsize=16, label="suptitle")
 
     # Line plot
     axs[0, 0].plot(x, y, marker="o", linestyle="-", color="b", label="sin(x)")
@@ -319,25 +312,19 @@ def create_default_figure():
             axs[0, 0].spines[spine].set_bounds(min(y), max(y))
 
     # Scatter plot
-    scatter = axs[0, 1].scatter(
-        x_scatter, y_scatter, c=colors, s=sizes, alpha=0.3, cmap="viridis"
-    )
+    scatter = axs[0, 1].scatter(x_scatter, y_scatter, c=colors, s=sizes, alpha=0.3, cmap="viridis")
     axs[0, 1].set_label("Scatter Plot")
     axs[0, 1].set_title("Scatter Plot")
     axs[0, 1].annotate(
         "Example Annotation",
         xy=(0.5, 0.5),
         xytext=(0.7, 0.7),
-        arrowprops=dict(
-            arrowstyle="->", connectionstyle="arc3,rad=0.5", facecolor="black", lw=0.5
-        ),
+        arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0.5", facecolor="black", lw=0.5),
     )
     fig.colorbar(scatter, ax=axs[0, 1])
 
     # Bar chart
-    axs[1, 0].bar(
-        categories, values, color=["lightgray", "darkgray", "lightgray", "lightgray"]
-    )
+    axs[1, 0].bar(categories, values, color=["lightgray", "darkgray", "lightgray", "lightgray"])
     axs[1, 0].set_label("Bar Chart")
     axs[1, 0].set_title("Bar Chart")
     axs[1, 0].grid(True, axis="y", color="white")
