@@ -1,60 +1,81 @@
-<p align="center"> <img width="30%" src="./figureforge/resources/assets/logo_color_text.png"> </p>
+# FigureForge
 
-A Python GUI application for interactive creation and editing of matplotlib figures.
+A local web interface for editing Matplotlib figures. Select an artist in the left
+sidebar, change its properties, and see the rendered figure update automatically.
+Export your edits as readable Python / Matplotlib setter calls.
 
-## Features
-- Edit matplotlib figures via a graphical interface.
-  - Adjust text labels, size, fonts, etc.
-  - Change colors of lines, text, symbols, etc.
-  - Adjust size of markers, lines
-  - And more!
-- [Save figures](htthttps://github.com/nogula/figureforge/wiki/FAQ-&-Troubleshooting#how-does-figureforge-save-figure-data) to a pickle file for use in other Python projects or to share (and load figures from a pickle file, too!).
-- Use [custom plugins](https://github.com/nogula/figureforge/wiki/Plugins) to automate figure styling.
+## Start the editor
 
-![](https://raw.githubusercontent.com/nogula/figureforge/main/figureforge/resources/assets/demo.png)
+```sh
+uv sync
+uv run figureforge
+# Or print the URL without opening a browser:
+uv run figureforge --no-browser --port 8765
+```
 
-## Installation
+The default demo includes two curves, axes, labels, grid lines, and a legend. Its
+Python export is a standalone script, including the original plotting code.
+The server uses only Python's standard library and listens on `127.0.0.1`.
+Open the full printed URL, including its session token after `#`.
+No frontend build, external assets, or internet connection is needed at runtime.
 
-1. Open a terminal or command prompt.
-2. Optionally, create a virtual environment.
-3. Run the following command to install figureforge:
+## Edit your own figure
 
-    ```
-    pip install figureforge
-    ```
-    _You may need to uninstall figureforge before upgrading._
-4. Start figureforge from the terminal:
-    ```
-    figureforge
-    ```
-    or from within a script:
-   ```
-   import matplotlib.pyplot as plt
-   import figureforge
+```python
+import matplotlib.pyplot as plt
+import figureforge
 
-   fig, ax = plt.subplots()
-   ax.plot([1,2,3,4],[1,4,9,16])
+fig, ax = plt.subplots()
+ax.plot([1, 2, 3], [1, 4, 9], label="Measurements")
+ax.legend()
 
-   # Do edits with figureforge...
-   fig = figureforge.run(fig)
-   # Continue your script after figureforge closes...
-   ```
+edited_fig = figureforge.run(fig)
+# Click Done in the browser to return the edited copy to your script.
+edited_fig.savefig("edited.png", dpi=200)
+```
 
-## Help
-The documentation for figureforge is available on the project's [wiki](https://github.com/nogula/figureforge/wiki) -- it is still a work in progress, but in the meantime you might find the [FAQ & Troubleshooting](https://github.com/nogula/figureforge/wiki/FAQ-&-Troubleshooting) page helpful. Consider also creating a [new issue](https://github.com/nogula/figureforge/issues), or ask a question in the [discussions](https://github.com/nogula/figureforge/discussions/1).
+`run` edits a copy; the input figure is unchanged. It blocks until **Done editing**
+or Ctrl+C. Closing the browser tab does not stop the server. The returned figure
+uses Matplotlib's Agg canvas and can be saved directly.
 
-## Contributing
-Obviously, figureforge is still early in development. Correspondingly, there are many opportunities to implement features and fix bugs. If you want to pitch in, you are welcome to fork the project and make a pull request.
+For an existing figure, **Download .py** exports an `apply_settings(fig)` function.
+Keep your original data and plotting code, then call this function immediately
+after constructing the same figure. The export uses Matplotlib directly and does
+not require FigureForge. Artist paths refer to the original artist hierarchy;
+apply the export with the same plotting code and Matplotlib version. Changing the
+plot's structure can invalidate those paths. The function records accepted edits
+in order, including edits that affect ticks and layout, drawing between changes.
+It does not serialize arbitrary source figures or their input data.
 
-Truth be told, I am an aerospace engineer and not a software developer; I don't know how to develop professional software, but am doing my best - especially because figureforge is solving one of my own problems. If you would like to contribute, I would be grateful. There is no formal development philosophy: I just recently learned that git tags are a thing. The closest thing to a development roadmap is this Kanban board, granted, these features are to some extent aspirational: [figureforge Project](https://github.com/users/nogula/projects/3/views/1).
+## Controls
 
-## Acknowledgements
-figureforge is possible only because of the open source technologies and resources from which figureforge stands on shoulders. Specifically, I wish to thank:
-- The developers of [matplotlib](https://matplotlib.org/) who are responsible for the very foundation of this project.
-- The GUI framework for figureforge is the Qt platform, specifically [PySide6](https://pypi.org/project/PySide6/).
-- The menu [icons](https://fonts.google.com/icons) used in figureforge were made by Google.
+- Search the artist tree for figures, axes, lines, scatter collections, patches,
+  text, legends, spines, or individual ticks.
+- Filter the selected artist's properties. Matplotlib's inspection API exposes
+  available setters with serializable getters, including color, font, marker,
+  line style, visibility, limits, scale, figure size, and DPI where supported.
+- Text and number controls update after a short pause. Checkboxes toggle boolean
+  settings. Arrays, dictionaries, and nullable values use JSON (`[0, 10]`,
+  `[1, 0, 0, 1]`, or `null`). Hover a control for accepted-value documentation.
+- Invalid edits show an error and leave the last successful preview and export
+  unchanged. Undo removes the last accepted change; Reset removes all edits.
+- Download the displayed PNG, copy the Python code, or download a `.py` file.
 
-## See Also
-A unique function of figureforge is its ability to work on matplotlib figures as part of any Python workflow. However, if you are looking for something more polished and are not so concerned with the serialization/data format of your figure, you might find the following projects of interest.
-- [Veusz](https://veusz.github.io/) is a scientific plotting and graphing program with a graphical user interface, designed to produce publication-ready 2D and 3D plots.
-- [LabPlot](https://labplot.kde.org/) open source and cross-platform Data Visualization and Analysis software accessible to everyone.
+Object-valued settings (transforms, callbacks, custom normalizers, font property
+objects, and similar settings) remain in Python. Properties without readable
+getters and arrays larger than 16 KB are omitted. Some getters and setters use
+different conventions; unsupported inputs are rejected by Matplotlib. This is
+an editor for existing artists, not a plotting-code or data-upload execution
+service. PNG previews are limited to 5,000 pixels per side and 16 megapixels.
+
+## Checks
+
+```sh
+uv run python -m unittest discover -s tests -v
+node --check src/figureforge/static/app.js
+```
+
+Tests cover code-export image equivalence, standalone demo export, transaction
+rollback, undo/reset, property inspection, and local HTTP routes and session
+validation. The socket integration test is skipped in environments that prohibit
+loopback sockets.

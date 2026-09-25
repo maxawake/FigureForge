@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FigureForge · Matplotlib editor</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header><div class="brand"><span class="mark">ƒ</span> FigureForge <span class="tag">MATPLOTLIB STUDIO</span></div><button id="finish">Done editing ↗</button></header>
+  <main>
+    <aside aria-label="Figure settings">
+      <div class="section-heading"><span>01 / FIGURE ARTISTS</span><span id="artist-count"></span></div>
+      <input id="artist-search" type="search" placeholder="Find an artist…" aria-label="Search artists">
+      <div id="tree" role="list" aria-label="Artists"></div>
+      <div class="property-heading"><div class="section-heading">02 / PROPERTIES</div><h2 id="selected-name">Figure</h2><input id="property-search" type="search" placeholder="Filter properties…" aria-label="Search properties"></div>
+      <div id="properties"></div>
+      <p class="help">Changes update the preview automatically. Arrays and null values use JSON. Hover a control for Matplotlib’s accepted values.</p>
+    </aside>
+    <section class="workspace" aria-label="Figure preview and code">
+      <div class="toolbar"><div><span class="live-dot"></span><span id="status" role="status">Connecting…</span></div><div><button id="undo" disabled>↶ Undo</button><button id="reset" disabled>Reset</button><button id="download-image">Save PNG</button></div></div>
+      <div id="error" role="alert" hidden></div>
+      <div class="preview"><img id="preview" alt="Live Matplotlib figure preview"></div>
+      <section class="code-panel"><div class="code-heading"><div><span class="section-heading">03 / REPRODUCIBLE PYTHON</span><p>Your edits, as Matplotlib code.</p></div><div><button id="copy">Copy code</button><button id="download-code" class="primary">Download .py ↓</button></div></div><pre><code id="code"></code></pre></section>
+    </section>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>
