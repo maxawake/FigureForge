@@ -8,12 +8,28 @@
   <header><div class="brand"><span class="mark">ƒ</span> FigureForge <span class="tag">MATPLOTLIB STUDIO</span></div><button id="finish">Done editing ↗</button></header>
   <main>
     <aside aria-label="Figure settings">
-      <div class="section-heading"><span>01 / FIGURE ARTISTS</span><span id="artist-count"></span></div>
-      <input id="artist-search" type="search" placeholder="Find an artist…" aria-label="Search artists">
-      <div id="tree" role="list" aria-label="Artists"></div>
-      <div class="property-heading"><div class="section-heading">02 / PROPERTIES</div><h2 id="selected-name">Figure</h2><input id="property-search" type="search" placeholder="Filter properties…" aria-label="Search properties"></div>
+      <section class="plot-builder" aria-label="Add a plot">
+        <div class="section-heading">01 / BUILD FROM YOUR DATA</div>
+        <p id="data-summary" class="help"></p>
+        <label for="plot-function">Plot function</label>
+        <select id="plot-function" aria-label="Plot function"></select>
+        <div id="new-bindings"></div>
+        <button id="add-plot" class="primary">+ Add plot</button>
+      </section>
+      <details class="rc-widget">
+        <summary>Global Matplotlib rcParams</summary>
+        <p class="help">Set global defaults here. Plot-specific edits below take precedence.</p>
+        <input id="rc-search" type="search" placeholder="Find rcParams, e.g. font.size…" aria-label="Search rcParams">
+        <div id="rc-properties"></div>
+      </details>
+      <div class="section-heading"><span>02 / FIGURE & PLOTS</span><span id="artist-count"></span></div>
+      <input id="artist-search" type="search" placeholder="Find plot, scatter, text…" aria-label="Search plot objects">
+      <div id="tree" role="list" aria-label="Plot objects"></div>
+      <div class="property-heading"><div class="section-heading">03 / CALL PARAMETERS</div><h2 id="selected-name">Figure</h2><input id="property-search" type="search" placeholder="Filter call parameters…" aria-label="Search parameters"></div>
+      <div id="layer-bindings"></div>
+      <button id="remove-plot" hidden>Remove this plot</button>
       <div id="properties"></div>
-      <p class="help">Changes update the preview automatically. Arrays and null values use JSON. Hover a control for Matplotlib’s accepted values.</p>
+      <p class="help">Bind data inputs to dictionary keys. Select Labels & axes to add titles, axis labels, a legend, and a grid. Arrays and nullable settings use JSON. Reset a parameter to inherit Matplotlib defaults.</p>
     </aside>
     <section class="workspace" aria-label="Figure preview and code">
       <div class="toolbar"><div><span class="live-dot"></span><span id="status" role="status">Connecting…</span></div><div><button id="undo" disabled>↶ Undo</button><button id="reset" disabled>Reset</button><button id="download-image">Save PNG</button></div></div>

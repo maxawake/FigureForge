@@ -9,7 +9,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from importlib.resources import files
 from urllib.parse import parse_qs, urlparse
 
-from figureforge.editor import Editor, demo_figure
+from figureforge.builder import BuilderEditor, demo_data
 
 
 def make_server(editor, port=0):
@@ -95,13 +95,14 @@ def make_server(editor, port=0):
     return server, f"http://127.0.0.1:{server.server_port}/#{token}"
 
 
-def run(fig=None, *, port=0, open_browser=True):
-    """Edit a copy of *fig* until Done (or Ctrl+C), then return that figure.
+def run(data=None, *, port=0, open_browser=True):
+    """Build a figure from a dictionary of named data, then return that figure.
 
-    Without a figure, open a demo whose export is a standalone Python script.
-    Existing figures export an apply_settings(fig) function for the original plot.
+    Choose plotting functions and data keys in the browser. Click Done (or press
+    Ctrl+C) to return the result. Exports define make_figure(data). When data is
+    omitted, offer example arrays. An empty dictionary is also accepted.
     """
-    editor = Editor(demo_figure() if fig is None else fig, demo=fig is None)
+    editor = BuilderEditor(demo_data() if data is None else data)
     server, url = make_server(editor, port)
     print(f"FigureForge: {url}\nClick Done in the editor or press Ctrl+C to stop.", flush=True)
     if open_browser:
